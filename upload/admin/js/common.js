@@ -1,5 +1,6 @@
 /* $Id : common.js 4824 2007-01-31 08:23:56Z paulgao $ */
 
+
 /* 检查新订单的时间间隔 */
 var NEW_ORDER_INTERVAL = 180000;
 

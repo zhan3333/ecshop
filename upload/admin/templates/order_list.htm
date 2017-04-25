@@ -239,18 +239,20 @@ listTable.filter.{$key} = '{$item}';
      */
     function show_order_goods(e, order_id, layer_id)
     {
+        console.log(111111111);
         create_goods_layer(layer_id);
         $layer_id = Utils.$(layer_id);
         $layer_id.style.top = (Utils.y(e) + 12) + 'px';
         $layer_id.style.left = (Utils.x(e) + 12) + 'px';
+        console.info(order_id);
         if (typeof(goods_hash_table[order_id]) == 'object')
         {
             response_goods_info(goods_hash_table[order_id]);
         }
         else
         {
-            $layer_id.innerHTML = loading;
-            Ajax.call('order.php?is_ajax=1&act=get_goods_info&order_id='+order_id, '', response_goods_info , 'POST', 'JSON');
+            /*$layer_id.innerHTML = loading;
+            Ajax.call('order.php?is_ajax=1&act=get_goods_info&order_id=' + order_id, '', response_goods_info , 'POST', 'JSON');*/
         }
     }
 
@@ -261,8 +263,8 @@ listTable.filter.{$key} = '{$item}';
      */
     function hide_order_goods(layer_id)
     {
-        $layer_id = Utils.$(layer_id);
-        window.timer = window.setTimeout('$layer_id.style.display = "none"', 500);
+        /*$layer_id = Utils.$(layer_id);
+        window.timer = window.setTimeout('$layer_id.style.display = "none"', 500);*/
     }
 
     /**
