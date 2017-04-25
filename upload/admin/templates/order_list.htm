@@ -22,48 +22,48 @@
 <!-- 订单列表 -->
 <form method="post" action="order.php?act=operate" name="listForm" onsubmit="return check()">
   <div class="list-div" id="listDiv">
-{/if}
+    {/if}
 
-<table cellpadding="3" cellspacing="1">
-  <tr>
-    <th>
-      <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox" /><a href="javascript:listTable.sort('order_sn', 'DESC'); ">{$lang.order_sn}</a>{$sort_order_sn}
-    </th>
-    <th><a href="javascript:listTable.sort('add_time', 'DESC'); ">{$lang.order_time}</a>{$sort_order_time}</th>
-    <th><a href="javascript:listTable.sort('consignee', 'DESC'); ">{$lang.consignee}</a>{$sort_consignee}</th>
-    <th><a href="javascript:listTable.sort('total_fee', 'DESC'); ">{$lang.total_fee}</a>{$sort_total_fee}</th>
-    <th><a href="javascript:listTable.sort('order_amount', 'DESC'); ">{$lang.order_amount}</a>{$sort_order_amount}</th>
-    <th>{$lang.all_status}</th>
-    <th>{$lang.handler}</th>
-  <tr>
-  {foreach from=$order_list item=order key=okey}
-  <tr>
-    <td valign="top" nowrap="nowrap"><input type="checkbox" name="checkboxes" value="{$order.order_sn}" /><a href="order.php?act=info&order_id={$order.order_id}" id="order_{$okey}">{$order.order_sn}{if $order.extension_code eq "group_buy"}<br /><div align="center">{$lang.group_buy}</div>{elseif $order.extension_code eq "exchange_goods"}<br /><div align="center">{$lang.exchange_goods}</div>{/if}</a></td>
-    <td>{$order.buyer|escape}<br />{$order.short_order_time}</td>
-    <td align="left" valign="top"><a href="mailto:{$order.email}"> {$order.consignee|escape}</a>{if $order.tel} [TEL: {$order.tel|escape}]{/if} <br />{$order.address|escape}</td>
-    <td align="right" valign="top" nowrap="nowrap">{$order.formated_total_fee}</td>
-    <td align="right" valign="top" nowrap="nowrap">{$order.formated_order_amount}</td>
-    <td align="center" valign="top" nowrap="nowrap">{$lang.os[$order.order_status]},{$lang.ps[$order.pay_status]},{$lang.ss[$order.shipping_status]}</td>
-    <td align="center" valign="top"  nowrap="nowrap">
-     <a href="order.php?act=info&order_id={$order.order_id}">{$lang.detail}</a>
-     {if $order.can_remove}
-     <br /><a href="javascript:;" onclick="listTable.remove({$order.order_id}, remove_confirm, 'remove_order')">{$lang.remove}</a>
-     {/if}
-    </td>
-  </tr>
-  {/foreach}
-</table>
+    <table cellpadding="3" cellspacing="1">
+      <tr>
+        <th>
+          <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox" /><a href="javascript:listTable.sort('order_sn', 'DESC'); ">{$lang.order_sn}</a>{$sort_order_sn}
+        </th>
+        <th><a href="javascript:listTable.sort('add_time', 'DESC'); ">{$lang.order_time}</a>{$sort_order_time}</th>
+        <th><a href="javascript:listTable.sort('consignee', 'DESC'); ">{$lang.consignee}</a>{$sort_consignee}</th>
+        <th><a href="javascript:listTable.sort('total_fee', 'DESC'); ">{$lang.total_fee}</a>{$sort_total_fee}</th>
+        <th><a href="javascript:listTable.sort('order_amount', 'DESC'); ">{$lang.order_amount}</a>{$sort_order_amount}</th>
+        <th>{$lang.all_status}</th>
+        <th>{$lang.handler}</th>
+      <tr>
+        {foreach from=$order_list item=order key=okey}
+      <tr>
+        <td valign="top" nowrap="nowrap"><input type="checkbox" name="checkboxes" value="{$order.order_sn}" /><a href="order.php?act=info&order_id={$order.order_id}" id="order_{$okey}">{$order.order_sn}{if $order.extension_code eq "group_buy"}<br /><div align="center">{$lang.group_buy}</div>{elseif $order.extension_code eq "exchange_goods"}<br /><div align="center">{$lang.exchange_goods}</div>{/if}</a></td>
+        <td>{$order.buyer|escape}<br />{$order.short_order_time}</td>
+        <td align="left" valign="top"><a href="mailto:{$order.email}"> {$order.consignee|escape}</a>{if $order.tel} [TEL: {$order.tel|escape}]{/if} <br />{$order.address|escape}</td>
+        <td align="right" valign="top" nowrap="nowrap">{$order.formated_total_fee}</td>
+        <td align="right" valign="top" nowrap="nowrap">{$order.formated_order_amount}</td>
+        <td align="center" valign="top" nowrap="nowrap">{$lang.os[$order.order_status]},{$lang.ps[$order.pay_status]},{$lang.ss[$order.shipping_status]}</td>
+        <td align="center" valign="top"  nowrap="nowrap">
+          <a href="order.php?act=info&order_id={$order.order_id}">{$lang.detail}</a>
+          {if $order.can_remove}
+          <br /><a href="javascript:;" onclick="listTable.remove({$order.order_id}, remove_confirm, 'remove_order')">{$lang.remove}</a>
+          {/if}
+        </td>
+      </tr>
+      {/foreach}
+    </table>
 
-<!-- 分页 -->
-<table id="page-table" cellspacing="0">
-  <tr>
-    <td align="right" nowrap="true">
-    {include file="page.htm"}
-    </td>
-  </tr>
-</table>
+    <!-- 分页 -->
+    <table id="page-table" cellspacing="0">
+      <tr>
+        <td align="right" nowrap="true">
+          {include file="page.htm"}
+        </td>
+      </tr>
+    </table>
 
-{if $full_page}
+    {if $full_page}
   </div>
   <div>
     <input name="confirm" type="submit" id="btnSubmit" value="{$lang.op_confirm}" class="button" disabled="true" onclick="this.form.target = '_self'" />
@@ -76,13 +76,13 @@
   </div>
 </form>
 <script language="JavaScript">
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
+    listTable.recordCount = {$record_count};
+    listTable.pageCount = {$page_count};
 
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
-{literal}
+    {foreach from=$filter item=item key=key}
+    listTable.filter.{$key} = '{$item}';
+    {/foreach}
+    {literal}
 
     onload = function()
     {
@@ -104,24 +104,24 @@ listTable.filter.{$key} = '{$item}';
 
     function check()
     {
-      var snArray = new Array();
-      var eles = document.forms['listForm'].elements;
-      for (var i=0; i<eles.length; i++)
-      {
-        if (eles[i].tagName == 'INPUT' && eles[i].type == 'checkbox' && eles[i].checked && eles[i].value != 'on')
+        var snArray = new Array();
+        var eles = document.forms['listForm'].elements;
+        for (var i=0; i<eles.length; i++)
         {
-          snArray.push(eles[i].value);
+            if (eles[i].tagName == 'INPUT' && eles[i].type == 'checkbox' && eles[i].checked && eles[i].value != 'on')
+            {
+                snArray.push(eles[i].value);
+            }
         }
-      }
-      if (snArray.length == 0)
-      {
-        return false;
-      }
-      else
-      {
-        eles['order_id'].value = snArray.toString();
-        return true;
-      }
+        if (snArray.length == 0)
+        {
+            return false;
+        }
+        else
+        {
+            eles['order_id'].value = snArray.toString();
+            return true;
+        }
     }
     /**
      * 显示订单商品及缩图
@@ -167,19 +167,19 @@ listTable.filter.{$key} = '{$item}';
             }
         }
     }
-    listTable.listCallback = function(result, txt) 
+    listTable.listCallback = function(result, txt)
     {
-        if (result.error > 0) 
+        if (result.error > 0)
         {
             alert(result.message);
         }
-        else 
+        else
         {
-            try 
+            try
             {
                 document.getElementById('listDiv').innerHTML = result.content;
                 bind_order_event();
-                if (typeof result.filter == "object") 
+                if (typeof result.filter == "object")
                 {
                     listTable.filter = result.filter;
                 }
@@ -239,20 +239,18 @@ listTable.filter.{$key} = '{$item}';
      */
     function show_order_goods(e, order_id, layer_id)
     {
-        console.log(111111111);
         create_goods_layer(layer_id);
         $layer_id = Utils.$(layer_id);
         $layer_id.style.top = (Utils.y(e) + 12) + 'px';
         $layer_id.style.left = (Utils.x(e) + 12) + 'px';
-        console.info(order_id);
         if (typeof(goods_hash_table[order_id]) == 'object')
         {
             response_goods_info(goods_hash_table[order_id]);
         }
         else
         {
-            /*$layer_id.innerHTML = loading;
-            Ajax.call('order.php?is_ajax=1&act=get_goods_info&order_id=' + order_id, '', response_goods_info , 'POST', 'JSON');*/
+            $layer_id.innerHTML = loading;
+            Ajax.call('order.php?is_ajax=1&act=get_goods_info&order_id='+order_id, '', response_goods_info , 'POST', 'JSON');
         }
     }
 
@@ -263,8 +261,8 @@ listTable.filter.{$key} = '{$item}';
      */
     function hide_order_goods(layer_id)
     {
-        /*$layer_id = Utils.$(layer_id);
-        window.timer = window.setTimeout('$layer_id.style.display = "none"', 500);*/
+        $layer_id = Utils.$(layer_id);
+        window.timer = window.setTimeout('$layer_id.style.display = "none"', 500);
     }
 
     /**

@@ -108,6 +108,7 @@ class cls_template
         if (strpos($out, $this->_echash) !== false)
         {
             $k = explode($this->_echash, $out);
+
             foreach ($k AS $key => $val)
             {
                 if (($key % 2) == 1)
@@ -195,8 +196,6 @@ class cls_template
                         {
                             mkdir($hash_dir);
                         }
-                        // smarty 缓存
-
                         if (file_put_contents($hash_dir . '/' . $cachename . '.php', '<?php exit;?>' . $data . $out, LOCK_EX) === false)
                         {
                             trigger_error('can\'t write:' . $hash_dir . '/' . $cachename . '.php');
@@ -285,8 +284,9 @@ class cls_template
         if (!defined('ECS_ADMIN'))
         {
             $source = $this->smarty_prefilter_preCompile($source);
+
         }
-        $source=preg_replace("/([^a-zA-Z0-9_]{1,1})+(copy|fputs|fopen|file_put_contents|fwrite|eval|phpinfo)+( |\()/is", "", $source);
+
         if(preg_match_all('~(<\?(?:\w+|=)?|\?>|language\s*=\s*[\"\']?php[\"\']?)~is', $source, $sp_match))
         {
             $sp_match[1] = array_unique($sp_match[1]);
@@ -294,13 +294,13 @@ class cls_template
             {
                 $source = str_replace($sp_match[1][$curr_sp],'%%%SMARTYSP'.$curr_sp.'%%%',$source);
             }
-             for ($curr_sp = 0, $for_max2 = count($sp_match[1]); $curr_sp < $for_max2; $curr_sp++)
+            for ($curr_sp = 0, $for_max2 = count($sp_match[1]); $curr_sp < $for_max2; $curr_sp++)
             {
-                 $source= str_replace('%%%SMARTYSP'.$curr_sp.'%%%', '<?php echo \''.str_replace("'", "\'", $sp_match[1][$curr_sp]).'\'; ?>'."\n", $source);
+                $source= str_replace('%%%SMARTYSP'.$curr_sp.'%%%', '<?php echo \''.str_replace("'", "\'", $sp_match[1][$curr_sp]).'\'; ?>'."\n", $source);
             }
-         }
-//         return preg_replace("/{([^\}\{\n]*)}/e", "\$this->select('\\1');", $source);
-        return preg_replace_callback("/{([^\}\{]*)}/", function($r) { return $this->select($r[1]); }, $source);
+        }
+        //return preg_replace("/{([^\}\{\n]*)}/e", "\$this->select('\\1');", $source);
+        return preg_replace_callback("/{([^\}\{\n]*)}/", function($r) { return $this->select($r[1]); }, $source);
     }
 
     /**
@@ -382,10 +382,6 @@ class cls_template
         }
         elseif ($tag{0} == '$') // 变量
         {
-//            if(strpos($tag,"'") || strpos($tag,"]"))
-//            {
-//                 return '';
-//            }
             return '<?php echo ' . $this->get_val(substr($tag, 1)) . '; ?>';
         }
         elseif ($tag{0} == '/') // 结束 tag
@@ -422,9 +418,9 @@ class cls_template
         }
         else
         {
-//            $tag_sel = array_shift(explode(' ', $tag));
-            $tmp = explode(' ', $tag);
-            $tag_sel = array_shift($tmp);
+            //$tag_sel = array_shift(explode(' ', $tag));
+            $tag_arr = explode(' ', $tag);
+            $tag_sel = array_shift($tag_arr);
             switch ($tag_sel)
             {
                 case 'if':
@@ -495,8 +491,10 @@ class cls_template
                 case 'insert' :
                     $t = $this->get_para(substr($tag, 7), false);
 
-//                    $out = "<?php \n" . '$k = ' . preg_replace("/(\'\\$[^,]+)/e" , "stripslashes(trim('\\1','\''));", var_export($t, true)) . ";\n";
-                    $out = "<?php \n" . '$k = ' . preg_replace_callback("/(\'\\$[^,]+)/" , function ($r) {return stripslashes(trim($r[1],'\''));}, var_export($t, true)) . ";\n";
+                    //$out = "<?php \n" . '$k = ' . preg_replace("/(\'\\$[^,]+)/e" , "stripslashes(trim('\\1','\''));", var_export($t, true)) . ";\n";
+                    $out = "<?php \n" . '$k = ' . preg_replace_callback("/(\'\\$[^,]+)/", function($r) { return stripslashes(trim($r[1],'\'')); }, var_export($t, true)) . ";\n";
+
+
                     $out .= 'echo $this->_echash . $k[\'name\'] . \'|\' . serialize($k) . $this->_echash;' . "\n?>";
 
                     return $out;
@@ -555,8 +553,8 @@ class cls_template
     {
         if (strrpos($val, '[') !== false)
         {
-//            $val = preg_replace("/\[([^\[\]]*)\]/eis", "'.'.str_replace('$','\$','\\1')", $val);
-            $val = preg_replace_callback("/\[([^\[\]]*)\]/is", function ($r) {return '.' . str_replace('$', '\$', $r[1]);}, $val);
+            //  $val = preg_replace("/\[([^\[\]]*)\]/eis", "'.'.str_replace('$','\$','\\1')", $val);
+            $val = preg_replace_callback("/\[([^\[\]]*)\]/is", function($r) {  return '.'.str_replace('$','$',$r[1]); }, $val);
         }
 
         if (strrpos($val, '|') !== false)
@@ -682,7 +680,7 @@ class cls_template
             }
             if ($_var_name == 'smarty')
             {
-                 $p = $this->_compile_smarty_ref($t);
+                $p = $this->_compile_smarty_ref($t);
             }
             else
             {
@@ -1073,12 +1071,16 @@ class cls_template
         if ($file_type == '.dwt')
         {
             /* 将模板中所有library替换为链接 */
-//            $pattern     = '/<!--\s#BeginLibraryItem\s\"\/(.*?)\"\s-->.*?<!--\s#EndLibraryItem\s-->/se';
-//            $replacement = "'{include file='.strtolower('\\1'). '}'";
-//            $source      = preg_replace($pattern, $replacement, $source);
-
+            /*
+            $pattern     = '/<!--\s#BeginLibraryItem\s\"\/(.*?)\"\s-->.*?<!--\s#EndLibraryItem\s-->/se';
+            $replacement = "'{include file='.strtolower('\\1'). '}'";
+            $source      = preg_replace($pattern, $replacement, $source);
+            */
+            /**/
             $pattern     = '/<!--\s#BeginLibraryItem\s\"\/(.*?)\"\s-->.*?<!--\s#EndLibraryItem\s-->/s';
-            $source      = preg_replace_callback($pattern, function ($r) {return '{include file=' . strtolower($r[1]) . '}'; }, $source);
+            $replacement = "'{include file='.strtolower('\\1'). '}'";
+            $source      = preg_replace_callback($pattern, function($r) {  return '{include file='.strtolower($r[1]).'}'; }, $source);
+            //$source = my_preg_replace($pattern, $replacement, $source);
 
             /* 检查有无动态库文件，如果有为其赋值 */
             $dyna_libs = get_dyna_libs($GLOBALS['_CFG']['template'], $this->_current_file);
@@ -1126,11 +1128,11 @@ class cls_template
         /**
          * 处理库文件
          */
-         elseif ($file_type == '.lbi')
-         {
+        elseif ($file_type == '.lbi')
+        {
             /* 去除meta */
             $source = preg_replace('/<meta\shttp-equiv=["|\']Content-Type["|\']\scontent=["|\']text\/html;\scharset=(?:.*?)["|\']>\r?\n?/i', '', $source);
-         }
+        }
 
         /* 替换文件编码头部 */
         if (strpos($source, "\xEF\xBB\xBF") !== FALSE)
@@ -1145,7 +1147,7 @@ class cls_template
             '/((?:background|src)\s*=\s*["|\'])(?:\.\/|\.\.\/)?(images\/.*?["|\'])/is', // 在images前加上 $tmp_dir
             '/((?:background|background-image):\s*?url\()(?:\.\/|\.\.\/)?(images\/)/is', // 在images前加上 $tmp_dir
             '/([\'|"])\.\.\//is', // 以../开头的路径全部修正为空
-            );
+        );
         $replace = array(
             '\1',
             '',
@@ -1153,7 +1155,7 @@ class cls_template
             '\1' . $tmp_dir . '\2',
             '\1' . $tmp_dir . '\2',
             '\1'
-            );
+        );
         return preg_replace($pattern, $replace, $source);
     }
 
