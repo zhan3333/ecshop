@@ -76,6 +76,21 @@ class captcha
      */
     var $height     = 20;
 
+
+
+    /**
+     * 构造函数
+     *
+     * @access  public
+     * @param
+     *
+     * @return void
+     */
+    function __construct($folder = '', $width = 145, $height = 20)
+    {
+        $this->captcha($folder, $width, $height);
+    }
+
     /**
      * 构造函数
      *
@@ -107,20 +122,6 @@ class captcha
             return (((imagetypes() & IMG_GIF) > 0) || ((imagetypes() & IMG_JPG)) > 0 );
         }
     }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param
-     *
-     * @return void
-     */
-    function __construct($folder = '', $width = 145, $height = 20)
-    {
-        $this->captcha($folder, $width, $height);
-    }
-
 
     /**
      * 检查给出的验证码是否和session中的一致

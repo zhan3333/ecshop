@@ -151,7 +151,7 @@ function onSOver(tplid, fgid, _self)
   var img_url = document.getElementById(tplid).src;
   StyleCode = fgid;
   StyleTem = tplid;
-    
+
   T = 0;
 
   // 模板切换
@@ -159,7 +159,7 @@ function onSOver(tplid, fgid, _self)
   {
     document.getElementById(tplid).src = img_url.replace(re, '/screenshot_' + fgid + '.png');
   }
-  else 
+  else
   {
     document.getElementById(tplid).src = img_url.replace(re, '/screenshot.png');
   }
@@ -180,7 +180,7 @@ function onSOut(tplid, _self, def)
   // 模板切换为默认风格
   if ( def != '' )
  {
-    document.getElementById(tplid).src = def; 
+    document.getElementById(tplid).src = def;
   }
   else
   {
@@ -197,7 +197,7 @@ function onTempSelectClear(tplid, _self)
 
   // 模板切换为默认风格
   document.getElementById(tplid).src = img_url.replace(re, '/screenshot.png');
-    
+
   T = 0;
 
   return true;

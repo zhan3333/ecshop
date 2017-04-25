@@ -116,7 +116,9 @@ if (document.getElementById("listDiv"))
 
       for (i = 0; i < row.cells.length; i++)
       {
-        if (row.cells[i].tagName != "TH") row.cells[i].style.backgroundColor = '#F4FAFB';
+        if (row.cells[i].tagName != 'TH') {
+            row.cells[i].style.backgroundColor = '#F4FAFB';
+        }
       }
     }
 
@@ -134,7 +136,9 @@ if (document.getElementById("listDiv"))
 
       for (i = 0; i < row.cells.length; i++)
       {
-          if (row.cells[i].tagName != "TH") row.cells[i].style.backgroundColor = '#FFF';
+          if (row.cells[i].tagName != 'TH') {
+              row.cells[i].style.backgroundColor = '#FFF';
+          }
       }
     }
   }
