@@ -1,0 +1,13 @@
+{
+    "name": "zhan3333/ecshop",
+    "description": "ecshop修改版",
+    "authors": [
+        {
+            "name": "zhan",
+            "email": "grianchan@gmail.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "1.22.1"
+    }
+}

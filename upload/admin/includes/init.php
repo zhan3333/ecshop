@@ -88,6 +88,13 @@ require(ROOT_PATH . 'includes/lib_common.php');
 require(ROOT_PATH . ADMIN_PATH . '/includes/lib_main.php');
 require(ROOT_PATH . ADMIN_PATH . '/includes/cls_exchange.php');
 
+/* 加载composer库 */
+if (!file_exists(ROOT_PATH . '/vendor/autoload.php')) {
+    die('composer未初始化');
+}
+require_once ROOT_PATH . '/vendor/autoload.php';
+require_once ROOT_PATH . '/admin/includes/lib/Factory.php';
+
 /* 对用户传入的变量进行转义操作。*/
 if (!get_magic_quotes_gpc())
 {

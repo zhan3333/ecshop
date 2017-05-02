@@ -2,15 +2,7 @@
 
 /**
  * ECSHOP 前台公用文件
- * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
- * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
- * ============================================================================
- * $Author: liubo $
- * $Id: init.php 17217 2011-01-19 06:29:08Z liubo $
+ * @author zhan <grianchan@gmail.com>
 */
 
 if (!defined('IN_ECS'))
@@ -35,6 +27,13 @@ if (!file_exists(ROOT_PATH . 'data/install.lock') && !file_exists(ROOT_PATH . 'i
 
     exit;
 }
+
+/* 加载composer库 */
+if (!file_exists(ROOT_PATH . '/vendor/autoload.php')) {
+    die('composer未初始化');
+}
+require_once ROOT_PATH . '/vendor/autoload.php';
+require_once 'lib/Factory.php';
 
 /* 初始化设置 */
 @ini_set('memory_limit',          '64M');
