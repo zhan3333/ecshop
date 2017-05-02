@@ -108,7 +108,6 @@ class cls_template
         if (strpos($out, $this->_echash) !== false)
         {
             $k = explode($this->_echash, $out);
-
             foreach ($k AS $key => $val)
             {
                 if (($key % 2) == 1)
@@ -382,6 +381,10 @@ class cls_template
         }
         elseif ($tag{0} == '$') // 变量
         {
+//            if(strpos($tag,"'") || strpos($tag,"]"))
+//            {
+//                 return '';
+//            }
             return '<?php echo ' . $this->get_val(substr($tag, 1)) . '; ?>';
         }
         elseif ($tag{0} == '/') // 结束 tag
@@ -680,7 +683,7 @@ class cls_template
             }
             if ($_var_name == 'smarty')
             {
-                $p = $this->_compile_smarty_ref($t);
+                 $p = $this->_compile_smarty_ref($t);
             }
             else
             {
@@ -1128,11 +1131,11 @@ class cls_template
         /**
          * 处理库文件
          */
-        elseif ($file_type == '.lbi')
-        {
+         elseif ($file_type == '.lbi')
+         {
             /* 去除meta */
             $source = preg_replace('/<meta\shttp-equiv=["|\']Content-Type["|\']\scontent=["|\']text\/html;\scharset=(?:.*?)["|\']>\r?\n?/i', '', $source);
-        }
+         }
 
         /* 替换文件编码头部 */
         if (strpos($source, "\xEF\xBB\xBF") !== FALSE)
@@ -1147,7 +1150,7 @@ class cls_template
             '/((?:background|src)\s*=\s*["|\'])(?:\.\/|\.\.\/)?(images\/.*?["|\'])/is', // 在images前加上 $tmp_dir
             '/((?:background|background-image):\s*?url\()(?:\.\/|\.\.\/)?(images\/)/is', // 在images前加上 $tmp_dir
             '/([\'|"])\.\.\//is', // 以../开头的路径全部修正为空
-        );
+            );
         $replace = array(
             '\1',
             '',
@@ -1155,7 +1158,7 @@ class cls_template
             '\1' . $tmp_dir . '\2',
             '\1' . $tmp_dir . '\2',
             '\1'
-        );
+            );
         return preg_replace($pattern, $replace, $source);
     }
 

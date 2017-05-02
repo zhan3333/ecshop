@@ -102,16 +102,15 @@ class phpwind6 extends integrate
     }
 
 
-
     /**
      *  设置论坛cookie
      *
      * @access  public
-     * @param
-     *
+     * @param string $username
+     * @param null $remember
      * @return void
      */
-    function set_cookie ($username="")
+    function set_cookie ($username="", $remember= null)
     {
         parent::set_cookie($username);
         $cookie_name = substr(md5($this->db_sitehash), 0, 5) . '_winduser';

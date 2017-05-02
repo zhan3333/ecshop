@@ -1148,7 +1148,7 @@ function visit_stats()
                 'referer_domain, referer_path, access_url, access_time' .
             ') VALUES (' .
                 "'$ip', '$visit_times', '$browser', '$os', '$lang', '$area', ".
-                "'" . addslashes($domain) ."', '" . addslashes($path) ."', '" . addslashes(PHP_SELF) ."', '" . $time . "')";
+                "'" . htmlspecialchars(addslashes($domain)) ."', '" . htmlspecialchars(addslashes($path)) ."', '" . htmlspecialchars(addslashes(PHP_SELF)) ."', '" . $time . "')";
     $GLOBALS['db']->query($sql);
 }
 
@@ -1273,7 +1273,7 @@ function save_searchengine_keyword($domain, $path)
             $keywords = ecs_iconv('UTF8', 'GBK', $keywords);
         }
 
-        $GLOBALS['db']->autoReplace($GLOBALS['ecs']->table('keywords'), array('date' => local_date('Y-m-d'), 'searchengine' => $searchengine, 'keyword' => addslashes($keywords), 'count' => 1), array('count' => 1));
+        $GLOBALS['db']->autoReplace($GLOBALS['ecs']->table('keywords'), array('date' => local_date('Y-m-d'), 'searchengine' => $searchengine, 'keyword' => htmlspecialchars(addslashes($keywords)), 'count' => 1), array('count' => 1));
     }
 }
 

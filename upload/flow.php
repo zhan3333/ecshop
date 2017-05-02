@@ -241,6 +241,7 @@ elseif ($_REQUEST['step'] == 'login')
                 }
             }
 
+            $_POST['password']=isset($_POST['password']) ? trim($_POST['password']) : '';
             if ($user->login($_POST['username'], $_POST['password'],isset($_POST['remember'])))
             {
                 update_user_info();  //更新用户信息

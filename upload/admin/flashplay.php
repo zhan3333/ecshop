@@ -137,8 +137,11 @@ elseif ($_REQUEST['act'] == 'add')
         }
         elseif (!empty($_POST['img_src']))
         {
+            if(!get_file_suffix($_POST['img_src'], $allow_suffix))
+            {
+                sys_msg($_LANG['invalid_type']);
+            }
             $src = $_POST['img_src'];
-
             if(strstr($src, 'http') && !strstr($src, $_SERVER['SERVER_NAME']))
             {
                 $src = get_url_image($src);
@@ -243,7 +246,10 @@ elseif ($_REQUEST['act'] == 'edit')
         else if (!empty($_POST['img_src']))
         {
             $src =$_POST['img_src'];
-
+            if(!get_file_suffix($_POST['img_src'], $allow_suffix))
+            {
+                sys_msg($_LANG['invalid_type']);
+            }
             if(strstr($src, 'http') && !strstr($src, $_SERVER['SERVER_NAME']))
             {
                 $src = get_url_image($src);

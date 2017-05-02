@@ -15,7 +15,7 @@
 
 global $_LANG;
 
-$_LANG['alipay'] = '支付宝';
+$_LANG['alipay'] = '<font color="#FF0000">支付宝</font>';
 $_LANG['alipay_desc'] = '支付宝网站(www.alipay.com) 是国内先进的网上支付平台。<br/>支付宝收款接口：在线即可开通，<font color="red"><b>零预付，免年费</b></font>，单笔阶梯费率，无流量限制。<br/><a href="http://cloud.ecshop.com/payment_apply.php?mod=alipay" target="_blank"><font color="red">立即在线申请</font></a>';
 $_LANG['alipay_account'] = '支付宝帐户';
 $_LANG['alipay_key'] = '交易安全校验码';

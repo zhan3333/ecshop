@@ -41,6 +41,20 @@ if ($_REQUEST['act'] == 'main')
 if ($_REQUEST['act'] == 'query')
 {
     admin_priv('sql_query');
+    if(!empty($_POST['sql']))
+    {
+        preg_match_all("/(SELECT)/i", $_POST['sql'],$matches);
+        if(isset($matches[1]) && count($matches[1])>1)
+        {
+             sys_msg("this sql more than one SELECT ");
+        }
+
+        if(preg_match("/(UPDATE|DELETE|TRUNCATE|ALTER|DROP|FLUSH|INSERT|REPLACE|SET|CREATE|CONCAT)/i", $_POST['sql']))
+        {
+            sys_msg("this sql May contain UPDATE,DELETE,TRUNCATE,ALTER,DROP,FLUSH,INSERT,REPLACE,SET,CREATE,CONCAT ");
+        }
+    }
+
     assign_sql($_POST['sql']);
     assign_query_info();
     $smarty->assign('ur_here', $_LANG['04_sql_query']);

@@ -149,6 +149,7 @@ body {
 </div>
 </div>
 {insert_scripts files="../js/global.js,../js/utils.js,../js/transport.js"}
+{insert_scripts files="./js/menu.js"}
 <script language="JavaScript">
 <!--
 var collapse_all = "{$lang.collapse_all}";
@@ -377,7 +378,7 @@ Object.extend(ToggleHanlder ,{
   {
     if (document.getCookie(this.CookieName) != null)
     {
-      this.SourceObject = t_eval();
+      this.SourceObject = t_eval ();
       var items = document.getElementsByTagName('LI');
       for (var i = 0; i < items.length; i++)
       {

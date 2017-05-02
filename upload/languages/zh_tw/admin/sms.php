@@ -148,4 +148,19 @@ $_LANG['js_languages']['end_date_format_error'] = '結束日期格式不對。';
 $_LANG['js_languages']['money_empty_error'] = '請輸入您要充值的金額。';
 $_LANG['js_languages']['money_format_error'] = '金額格式不對。';
 
+
+$_LANG['insert_sign'] = '請輸入短信簽名';
+$_LANG['insert_succ'] = '添加成功';
+$_LANG['error_smg'] = '信息錯誤';
+$_LANG['edit_succ'] = '修改成功';
+$_LANG['default_succ'] = '簽名默認成功';
+$_LANG['no_default'] = '未有此默認值';
+$_LANG['add_sign'] = '新添短信簽名';
+$_LANG['new_default_sign'] = '當前默認簽名爲';
+$_LANG['default_sign'] = '原簽名';
+$_LANG['add'] = '添加';
+$_LANG['edited'] = '修改爲';
+$_LANG['edit'] = '修改';
+$_LANG['set_default_sign'] = '設置成默認簽名';
+
 ?>

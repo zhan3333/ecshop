@@ -17,8 +17,21 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 require_once(ROOT_PATH . 'includes/cls_sms.php');
+require_once(ROOT_PATH . 'includes/prism-php/lib/client.php');
+
+
+
 
 $action = isset($_REQUEST['act']) ? $_REQUEST['act'] : 'display_my_info';
+if(isset($_POST['sms_sign_update']))
+{
+    $action ='sms_sign_update';
+}
+elseif(isset($_POST['sms_sign_default']))
+{
+        $action ='sms_sign_default';
+}
+
 $sms = new sms();
 
 switch ($action)
@@ -119,6 +132,274 @@ switch ($action)
         }
 
         break;
+      case 'sms_sign':
+         admin_priv('sms_send');
+         
+        if ($sms->has_registered())
+        {
+            $sql="SELECT * FROM ". $ecs->table('shop_config') . "WHERE  code='sms_sign'";
+            $row=$db->getRow($sql);
+            if(!empty($row['id']))
+            {
+                $sms_sign=unserialize($row['value']);
+                $t=array();
+                if(is_array($sms_sign) && isset($sms_sign[$_CFG[ent_id]]))
+                {
+                    foreach($sms_sign[$_CFG[ent_id]] as $key=>$val)
+                    {
+                         
+                         $t[$_CFG[ent_id]][$key]['key']=$key;
+                         $t[$_CFG[ent_id]][$key]['value']=$val;
+                    }
+                    $smarty->assign('sms_sign', $t[$_CFG[ent_id]]);
+                }
+
+            }
+            else
+            {
+                 shop_config_update ('sms_sign','');
+                 shop_config_update ('default_sms_sign','');
+            }
+            $sql="SELECT * FROM ". $ecs->table('shop_config') . "WHERE  code='default_sms_sign'";
+            $default_sms_sign=$db->getRow($sql);
+            $smarty->assign('default_sign', $default_sms_sign['value']);
+
+
+
+            $smarty->display('sms_sign.htm');
+        }
+        else
+        {
+            $smarty->assign('ur_here', $_LANG['register_sms']);
+            $smarty->assign('sms_site_info', $sms->get_site_info());
+            assign_query_info();
+            $smarty->display('sms_register_ui.htm');
+        }
+        break;
+
+        case 'sms_sign_add':
+        admin_priv('sms_send');
+
+        if ($sms->has_registered())
+        {
+            $sql="SELECT * FROM ". $ecs->table('shop_config') . "WHERE  code='sms_sign'";
+            $row=$db->getRow($sql);
+            if(empty($_POST['sms_sign']))
+            {
+                sys_msg($_LANG['insert_sign'], 1, array(), false);
+            }
+
+            if(!empty($row['id']))
+            {
+                $sms_sign=unserialize($row['value']);
+                $smarty->assign('sms_sign', $sms_sign);
+                $data=array();
+                $data['shopexid']=$_CFG['ent_id'];
+                $data['passwd']=$_CFG['ent_ac'];
+
+                $content_t=$content_y=trim($_POST['sms_sign']);
+                if(EC_CHARSET != 'utf-8')
+                {
+                    $content_t= iconv('gb2312','utf-8',$content_y);
+                }
+
+                $url = 'https://openapi.shopex.cn';
+                $key = 'qufoxtpr';
+                $secret = 't66moqjixb2nntiy2io2';
+                $c = new prism_client($url, $key, $secret);
+                $params=array(
+                'shopexid'=>$_CFG['ent_id'],
+                'passwd'=>$_CFG['ent_ac'],
+                'content'=>$content_t,
+                'content-type'=>'application/x-www-form-urlencoded'
+                );
+                $result=$c->post('api/addcontent/new',$params);
+                $result=json_decode($result,true);
+                if($result['res']=='succ' && !empty($result['data']['extend_no']))
+                {
+                    $extend_no=$result['data']['extend_no'];
+                    $sms_sign[$_CFG['ent_id']][$extend_no]=$content_y;
+                    $sms_sign=serialize($sms_sign);
+                    if(empty($_CFG['default_sms_sign']))
+                    {
+                        shop_config_update ('default_sms_sign',$content_y);
+                    }
+                        shop_config_update ('sms_sign',$sms_sign);
+                    /* 清除缓存 */
+                    clear_all_files();
+                    sys_msg($_LANG['insert_succ'], 1, array(), false);
+                }
+                else
+                {
+                    $error_smg=$result['data'];
+                    if(EC_CHARSET != 'utf-8')
+                    {
+                        $error_smg= iconv('utf-8','gb2312',$error_smg);
+                    }
+                    sys_msg($error_smg, 1, array(), false);
+                }
+
+            }
+            else
+            {
+                 shop_config_update ('default_sms_sign',$content_y);
+                 shop_config_update ('sms_sign','');
+                 /* 清除缓存 */
+                 clear_all_files();
+                 sys_msg($_LANG['error_smg'], 1, array(), false);
+            }
+        }
+        else
+        {
+            $smarty->assign('ur_here', $_LANG['register_sms']);
+            $smarty->assign('sms_site_info', $sms->get_site_info());
+            assign_query_info();
+            $smarty->display('sms_register_ui.htm');
+        }
+         break;
+
+
+        case 'sms_sign_update':
+        admin_priv('sms_send');
+        if ($sms->has_registered())
+        {
+            $sql="SELECT * FROM ". $ecs->table('shop_config') . "WHERE  code='sms_sign'";
+            $row=$db->getRow($sql);
+            if(!empty($row['id']))
+            {
+                $sms_sign=unserialize($row['value']);
+                $smarty->assign('sms_sign', $sms_sign);
+                $data=array();
+                $data['shopexid']=$_CFG['ent_id'];
+                $data['passwd']=$_CFG['ent_ac'];
+                
+                $extend_no=$_POST['extend_no']; 
+
+                $content_t=$content_y=$sms_sign[$_CFG['ent_id']][$extend_no];
+                $new_content_t=$new_content_y=$_POST['new_sms_sign'];
+
+                if(!isset($sms_sign[$_CFG[ent_id]][$extend_no]) || empty($extend_no))
+                {
+                      sys_msg($_LANG['error_smg'], 1, array(), false);
+                }
+                if(EC_CHARSET != 'utf-8')
+                {
+                    $content_t= iconv('gb2312','utf-8',$content_y);
+                    $new_content_t= iconv('gb2312','utf-8',$new_content_y);
+                }
+                $url = 'https://openapi.shopex.cn';
+                $key = 'qufoxtpr';
+                $secret = 't66moqjixb2nntiy2io2';
+                $c = new prism_client($url, $key, $secret);
+                $params=array(
+                'shopexid'=>$_CFG['ent_id'],
+                'passwd'=>$_CFG['ent_ac'],
+                'old_content'=>$content_t,
+                'new_content'=>$new_content_t,
+                'content-type'=>'application/x-www-form-urlencoded'
+                );
+                $result=$c->post('api/addcontent/update',$params);
+                $result=json_decode($result,true);
+
+                if($result['res']=='succ' && !empty($result['data']['new_extend_no']))
+                {
+                    $new_extend_no=$result['data']['new_extend_no'];
+                    unset($sms_sign[$_CFG['ent_id']][$extend_no]);
+                    $sms_sign[$_CFG['ent_id']][$new_extend_no]=$new_content_y;
+
+                    $sms_sign=serialize($sms_sign);
+                    if(empty($_CFG['default_sms_sign']))
+                    {
+                        shop_config_update ('default_sms_sign',$new_content_y);
+                    }
+                        shop_config_update ('sms_sign',$sms_sign);
+
+                    /* 清除缓存 */
+                    clear_all_files();
+                    sys_msg($_LANG['edit_succ'], 1, array(), false);
+                }
+                else
+                {
+                    $error_smg=$result['data'];
+                    if(EC_CHARSET != 'utf-8')
+                    {
+                        $error_smg= iconv('utf-8','gb2312',$error_smg);
+                    }
+                    sys_msg($error_smg, 1, array(), false);
+                }
+
+            }
+            else
+            {
+                 shop_config_update ('default_sms_sign',$content_y);
+                 shop_config_update ('sms_sign','');
+                 /* 清除缓存 */
+                  clear_all_files();
+                 sys_msg($_LANG['error_smg'], 1, array(), false);
+            }
+
+        }
+        else
+        {
+            $smarty->assign('ur_here', $_LANG['register_sms']);
+            $smarty->assign('sms_site_info', $sms->get_site_info());
+            assign_query_info();
+            $smarty->display('sms_register_ui.htm');
+        }
+         break;
+
+        case 'sms_sign_default':
+        admin_priv('sms_send');
+        if ($sms->has_registered())
+        {
+            $sql="SELECT * FROM ". $ecs->table('shop_config') . "WHERE  code='sms_sign'";
+            $row=$db->getRow($sql);
+            if(!empty($row['id']))
+            {
+                $sms_sign=unserialize($row['value']);
+                $smarty->assign('sms_sign', $sms_sign);
+                $data=array();
+                $data['shopexid']=$_CFG['ent_id'];
+                $data['passwd']=$_CFG['ent_ac'];
+                
+                $extend_no=$_POST['extend_no']; 
+
+                $sms_sign_default=$sms_sign[$_CFG[ent_id]][$extend_no];
+                if(!empty($sms_sign_default))
+                {
+                    shop_config_update ('default_sms_sign',$sms_sign_default);
+                    /* 清除缓存 */
+                     clear_all_files();
+                    sys_msg($_LANG['default_succ'], 1, array(), false);
+                }
+                else
+                {
+                    sys_msg($_LANG['no_default'], 1, array(), false);
+                }
+
+            }
+            else
+            {
+                 shop_config_update ('default_sms_sign',$content_y);
+                 shop_config_update ('sms_sign','');
+                  /* 清除缓存 */
+                 clear_all_files();
+                 sys_msg($_LANG['error_smg'], 1, array(), false);
+            }
+
+        }
+        else
+        {
+            $smarty->assign('ur_here', $_LANG['register_sms']);
+            $smarty->assign('sms_site_info', $sms->get_site_info());
+            assign_query_info();
+            $smarty->display('sms_register_ui.htm');
+        }
+         break;
+
+
+
+
 
     /* 发送短信 */
     case 'send_sms' :
@@ -401,5 +682,37 @@ switch ($action)
 //            $smarty->display('sms_my_info.htm');
 //        }
 }
+
+
+
+
+function shop_config_update ($config_code,$config_value)
+{
+	$sql="SELECT `id` FROM ".$GLOBALS['ecs']->table(shop_config)." WHERE `code`='$config_code'";
+	$c_node_id=$GLOBALS['db']->getOne($sql);
+	if(empty($c_node_id))
+    {
+    	for ($i=247;$i<=270;$i++)
+        {
+        	$sql="SELECT `id` FROM ".$GLOBALS['ecs']->table(shop_config)." WHERE `id`='$i'";
+        	$c_id=$GLOBALS['db']->getOne($sql);
+        	if(empty($c_id))
+            {
+            	$sql="INSERT INTO ".$GLOBALS['ecs']->table(shop_config)."(`id`,`parent_id`,`code`,`type`,`value`,`sort_order`) VALUES ('$i','2','$config_code','hidden','$config_value','1')";
+            	$GLOBALS['db']->query($sql);
+            	break;
+            }
+        }
+    }
+    else
+    {
+    	$sql="UPDATE ".$GLOBALS['ecs']->table(shop_config)." SET `value`='$config_value'  WHERE `code`='$config_code'";
+    	$GLOBALS['db']->query($sql);
+    }
+}
+
+
+
+
 
 ?>

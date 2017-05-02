@@ -27,6 +27,11 @@ if (empty($pay_code) && !empty($_REQUEST['v_pmode']) && !empty($_REQUEST['v_pstr
     $pay_code = 'cappay';
 }
 
+if(isset($_POST['MerRemark'])  && $_POST['MerRemark']=='epay')
+{
+    $pay_code ='epay';
+}
+
 //获取快钱神州行支付方式
 if (empty($pay_code) && ($_REQUEST['ext1'] == 'shenzhou') && ($_REQUEST['ext2'] == 'ecshop'))
 {

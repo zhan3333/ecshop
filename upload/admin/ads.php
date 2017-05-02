@@ -19,7 +19,7 @@ require(dirname(__FILE__) . '/includes/init.php');
 include_once(ROOT_PATH . 'includes/cls_image.php');
 $image = new cls_image($_CFG['bgcolor']);
 $exc   = new exchange($ecs->table("ad"), $db, 'ad_id', 'ad_name');
-
+$allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp','swf');
 /* act操作项的初始化 */
 if (empty($_REQUEST['act']))
 {
@@ -537,7 +537,7 @@ elseif ($_REQUEST['act'] == 'remove')
 
     $exc->drop($id);
 
-    if ((strpos($img, 'http://') === false) && (strpos($img, 'https://') === false))
+    if ((strpos($img, 'http://') === false) && (strpos($img, 'https://') === false) && get_file_suffix($img, $allow_suffix))
     {
         $img_name = basename($img);
         @unlink(ROOT_PATH. DATA_DIR . '/afficheimg/'.$img_name);

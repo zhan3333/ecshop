@@ -111,6 +111,7 @@ class sms
        
         /* 检查发送信息的合法性 */
         $contents=$this->get_contents($phones, $msg);  
+
         if(!$contents)
         {
             $this->errors['server_errors']['error_no'] = 3;//发送的信息有误
@@ -154,7 +155,6 @@ class sms
                 $send_str['certi_app']='sms.send';
                 $send_str['entId']=$GLOBALS['_CFG']['ent_id'];
                 $send_str['entPwd']=$GLOBALS['_CFG']['ent_ac'];
-                $send_str['license']=$GLOBALS['_CFG']['certificate_id'];
                 $send_str['source']=SOURCE_ID;
 
                 $send_str['sendType'] = 'fan-out';
@@ -185,7 +185,7 @@ class sms
             $send_str['certi_app']='sms.send';
             $send_str['entId']=$GLOBALS['_CFG']['ent_id'];
             $send_str['entPwd']=$GLOBALS['_CFG']['ent_ac'];
-            $send_str['license']=$GLOBALS['_CFG']['certificate_id'];
+            $send_str['license']='111111';
             $send_str['source']=SOURCE_ID;
 
             $send_str['use_backlist'] = '1';
@@ -199,7 +199,6 @@ class sms
             $response = $this->t->request($sms_url, $send_str,'POST');
             $result = $this->json->decode($response['body'], true);
         }
-
         if($result['res'] == 'succ')
         {
             return true;
@@ -316,7 +315,8 @@ class sms
         {
             return false;
         }
-        $msg.='【'. $GLOBALS['_CFG']['shop_name'].'】';
+        $msg.= $GLOBALS['_CFG']['default_sms_sign'];
+
         $phone_key=0;
         $i=0;
         $phones=explode(',',$phones);

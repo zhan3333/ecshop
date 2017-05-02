@@ -149,4 +149,22 @@ $_LANG['js_languages']['end_date_format_error'] = 'Deadline format is invalid.';
 //--Recharge
 $_LANG['js_languages']['money_empty_error'] = 'Please enter charge what you want to recharge.';
 $_LANG['js_languages']['money_format_error'] = 'Money format is invalid.';
+
+
+
+
+$_LANG['insert_sign'] = 'Please enter the message signature';
+$_LANG['insert_succ'] = 'Added successfully';
+$_LANG['error_smg'] = 'Wrong information';
+$_LANG['edit_succ'] = 'Successful modification';
+$_LANG['default_succ'] = 'The successful signature';
+$_LANG['no_default'] = 'No default value';
+$_LANG['add_sign'] = 'New message signature';
+$_LANG['new_default_sign'] = 'The current default signature';
+$_LANG['default_sign'] = 'The original signature';
+$_LANG['add'] = 'Add to';
+$_LANG['edited'] = 'Amended as';
+$_LANG['edit'] = 'edit';
+$_LANG['set_default_sign'] = 'Set the default signature';
+
 ?>

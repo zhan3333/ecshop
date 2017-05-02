@@ -39,7 +39,7 @@ $_LANG['phone'] = '接收手机号码';
 $_LANG['user_rand'] = '按用户等级发送短消息';
 $_LANG['phone_notice'] = '多个手机号码用半角逗号分开';
 $_LANG['msg'] = '消息内容';
-$_LANG['msg_notice'] = '最长70字符';
+$_LANG['msg_notice'] = '最长67字符，签名已经默认，不需要添加签名。（如未设置签名点击 <a href="sms.php?act=sms_sign">设置</a>）';
 $_LANG['send_date'] = '定时发送时间';
 $_LANG['send_date_notice'] = '格式为YYYY-MM-DD HH:II。为空表示立即发送。';
 $_LANG['back_send_history'] = '返回发送历史列表';
@@ -146,5 +146,26 @@ $_LANG['js_languages']['end_date_format_error'] = '结束日期格式不对。';
 //--充值
 $_LANG['js_languages']['money_empty_error'] = '请输入您要充值的金额。';
 $_LANG['js_languages']['money_format_error'] = '金额格式不对。';
+
+
+
+$_LANG['insert_sign'] = '请输入短信签名';
+$_LANG['insert_succ'] = '添加成功';
+$_LANG['error_smg'] = '信息错误';
+$_LANG['edit_succ'] = '修改成功';
+$_LANG['default_succ'] = '签名默认成功';
+$_LANG['no_default'] = '未有此默认值';
+$_LANG['add_sign'] = '新添短信签名';
+$_LANG['new_default_sign'] = '当前默认签名为';
+$_LANG['default_sign'] = '原签名';
+$_LANG['add'] = '添加';
+$_LANG['edited'] = '修改为';
+$_LANG['edit'] = '修改';
+$_LANG['set_default_sign'] = '设置成默认签名';
+
+
+
+
+
 
 ?>

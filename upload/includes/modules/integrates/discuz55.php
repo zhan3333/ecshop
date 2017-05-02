@@ -215,7 +215,7 @@ class discuz55 extends integrate
      *
      * @return void
      */
-    function set_cookie ($username="")
+    function set_cookie ($username="", $remember= null)
     {
         parent::set_cookie($username);
         if (empty($username))
