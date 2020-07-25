@@ -2,7 +2,7 @@
 
 此版本为适配php5.6版本的ecshop代码。ecshop版本为2.7.3。
 
-# 实例项目地址
+# 实例项目地址 (版本老旧，已停止访问)
 
 - 商城： http://ecshop.grianchan.com
 - 管理端： http://ecshop.grianchan.com/admin
@@ -18,8 +18,3 @@
 - mysql/5.6
 - Tengine/2.1.1
 - Linux/CentOS 7.2
-
-# 联系方式
-
-- QQ/390961827
-- 邮箱/grianchan@gmail.com
